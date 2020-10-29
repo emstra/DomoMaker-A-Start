@@ -9,45 +9,42 @@ const expressHandlebars = require('express-handlebars');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/Domomaker'
+const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/Domomaker';
 
-//Setup mongoose options to use newer functionality
-const mongooseOptions = 
-{
-    useNewUrlParser : true,
-    useUnifiedTopology : true,
-    useCreateIndex : true,
-}
+// Setup mongoose options to use newer functionality
+const mongooseOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+};
 
 mongoose.connect(dbURL, mongooseOptions, (err) => {
-    if(err){
-        console.log('could not connect to database');
-        throw err;
-    }
+  if (err) {
+    console.log('could not connect to database');
+    throw err;
+  }
 });
 
 const router = require('./router.js');
-const app = express ();
+
+const app = express();
 app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
 app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
 app.use(compression());
 app.use(bodyParser.urlencoded({
-    extended: true
+  extended: true,
 }));
 
-app.engine('handlebars', expressHandlebars({ defaultLayout: 'main'}));
+app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);
 app.use(cookieParser());
 
 router(app);
 
-app.listen(port, err => {
-    if (err) {
-        throw err;
-    }
-    console.log(`listening on port ${port}`);
+app.listen(port, (err) => {
+  if (err) {
+    throw err;
+  }
+  console.log(`listening on port ${port}`);
 });
-
-
-
