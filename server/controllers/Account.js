@@ -3,15 +3,16 @@ const models = require('../models');
 const { Account } = models;
 
 const loginPage = (req, res) => {
-  res.render('login');
+  res.render('login', {csrfToken: req.csrfToken() });
 };
 
 const signupPage = (req, res) => {
   req.session.destroy();
-  res.render('signup');
+  res.render('signup', {csrfToken: req.csrfToken() });
 };
 
 const logout = (req, res) => {
+  req.session.destroy();// destroy the session, allows redirect to work
   res.redirect('/');
 };
 
