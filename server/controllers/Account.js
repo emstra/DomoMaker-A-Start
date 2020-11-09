@@ -6,10 +6,6 @@ const loginPage = (req, res) => {
   res.render('login', {csrfToken: req.csrfToken() });
 };
 
-const signupPage = (req, res) => {
-  req.session.destroy();
-  res.render('signup', {csrfToken: req.csrfToken() });
-};
 
 const logout = (req, res) => {
   req.session.destroy();// destroy the session, allows redirect to work
@@ -84,8 +80,21 @@ const signup = (request, response) => {
   });
 };
 
+const getToken = (request, response) =>{
+  //checks for a csrf token
+  //allows us to get a token each time we want to send a form
+  const req = request;
+  const res = response;
+
+  const csrfJSON = {
+    csrfToken: req.csrfToken()
+  };
+
+  res.json(csrfJSON);
+}
+
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
-module.exports.signupPage = signupPage;
 module.exports.signup = signup;
+module.exports.getToken = getToken;
